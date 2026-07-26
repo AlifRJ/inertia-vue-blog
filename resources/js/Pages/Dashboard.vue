@@ -5,7 +5,6 @@ import { ref } from "vue";
 defineProps({
     user: Object,
 });
-const display = ref("This is a test");
 </script>
 
 <template>
@@ -23,12 +22,6 @@ const display = ref("This is a test");
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 justify-center align-middle">
                         <p>Hello {{ user[0].name }}!</p>
-                        <p>{{ display }}</p>
-                        <form action="post">
-                            <label for="">Input Nama Barang: </label>
-                            <input type="text" />
-                            <button>Submit</button>
-                        </form>
                     </div>
                 </div>
             </div>
