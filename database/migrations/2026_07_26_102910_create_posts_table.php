@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignid("user_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("user_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("category_id")->constrained('post_categories')->cascadeOnDelete();
             $table->string("title");
             $table->string("slug")->unique();
             $table->text("excerpt");
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->boolean("published")->default(false);
             $table->timestamp("published_at")->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

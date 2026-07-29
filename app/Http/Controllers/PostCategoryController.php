@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\PostCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class PostCategoryController extends Controller
 {
@@ -12,7 +14,8 @@ class PostCategoryController extends Controller
      */
     public function index()
     {
-        //
+        $post = PostCategory::where('user_id', Auth::id())->get();
+        return Inertia::render('Post/PostCategory',['post' => $post]); 
     }
 
     /**

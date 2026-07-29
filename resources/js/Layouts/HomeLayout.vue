@@ -17,9 +17,13 @@ defineProps({
 </script>
 
 <template>
-    <Header :canLogin="canLogin" :canRegister="canRegister" />
     <div>
-        <slot />
+        <Header :canLogin="canLogin" :canRegister="canRegister" />
+        <div>
+            <main class="min-h-screen mt-6 text-center">
+                <slot />
+            </main>
+        </div>
+        <Footer :laravelVersion="laravelVersion" />
     </div>
-    <Footer :laravelVersion="laravelVersion" />
 </template>

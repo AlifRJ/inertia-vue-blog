@@ -15,7 +15,7 @@ class PostController extends Controller
     public function index()
     {
         $post = Post::where('user_id', Auth::id())->get();
-        return Inertia::render('Post/Post',['post' => $post]); 
+        return Inertia::render('Post/Post',['posts' => $post]); 
     }
 
     /**

@@ -1,9 +1,8 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { ref } from "vue";
 defineProps({
-    post: Object,
+    posts: Object,
 });
 </script>
 
@@ -35,21 +34,21 @@ defineProps({
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="data in post">
+                                <tr v-for="post in posts">
                                     <td class="border border-black">
-                                        {{ data.user_id.name }}
+                                        {{ post.user_id.name }}
                                     </td>
                                     <td class="border border-black">
-                                        {{ data.title }}
+                                        {{ post.title }}
                                     </td>
                                     <td class="border border-black">
-                                        {{ data.excerpt }}
+                                        {{ post.excerpt }}
                                     </td>
                                     <td class="border border-black">
-                                        {{ data.body }}
+                                        {{ post.body }}
                                     </td>
                                     <td class="border border-black">
-                                        {{ data.published_at }}
+                                        {{ post.published }}
                                     </td>
                                 </tr>
                             </tbody>
