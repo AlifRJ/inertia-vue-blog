@@ -58,12 +58,11 @@ defineProps({
                     <i class="fa-solid fa-fire text-blue-600"></i> Artikel
                     Terbaru
                 </h2>
-                <div
-                    v-for="post in posts"
-                    class="grid grid-cols-1 md:grid-cols-3 gap-8"
-                >
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <!-- Card -->
                     <div
+                        v-for="post in posts"
+                        :key="post.id"
                         class="bg-white rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-300 border border-gray-100 flex flex-col"
                     >
                         <div
@@ -73,7 +72,7 @@ defineProps({
                         </div>
                         <div class="p-6 flex flex-col flex-grow">
                             <span
-                                class="inline-block text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full mb-3 w-max"
+                                class="inline-flex items-center text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full mb-3 w-max"
                             >
                                 <i class="fa-solid fa-code mr-1"></i>
                                 {{ post.category?.name }}

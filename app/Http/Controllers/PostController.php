@@ -14,7 +14,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        $post = Post::where('user_id', Auth::id())->get();
+        $post = Auth::user()
+        ->posts()
+        ->with('category')
+        ->latest()
+        ->paginate(10);
         return Inertia::render('Post/Post',['posts' => $post]); 
     }
 

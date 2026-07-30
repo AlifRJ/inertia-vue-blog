@@ -65,12 +65,11 @@ defineProps({
                     <i class="fa-solid fa-book-open text-blue-600"></i> Semua
                     Artikel Blog
                 </h2>
-                <div
-                    v-for="post in posts"
-                    class="grid grid-cols-1 md:grid-cols-3 gap-8"
-                >
-                    <!-- Item 1 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Card -->
                     <div
+                        v-for="post in posts.data"
+                        :key="post.id"
                         class="bg-white rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-300 border border-gray-100 flex flex-col"
                     >
                         <div
@@ -98,6 +97,34 @@ defineProps({
                             </p>
                         </div>
                     </div>
+                </div>
+
+                <div
+                    v-if="posts.links && posts.links.length > 3"
+                    class="mt-10 flex items-center justify-center space-x-1"
+                >
+                    <template v-for="(link, index) in posts.links" :key="index">
+                        <!-- Active / Clickable Link -->
+                        <Link
+                            v-if="link.url"
+                            :href="link.url"
+                            v-html="link.label"
+                            class="px-3.5 py-2 text-sm font-medium rounded-lg transition border"
+                            :class="[
+                                link.active
+                                    ? 'bg-blue-600 text-white border-blue-600'
+                                    : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50',
+                            ]"
+                            preserve-scroll
+                        />
+
+                        <!-- Disabled State (First/Last page controls when inactive or '...') -->
+                        <span
+                            v-else
+                            v-html="link.label"
+                            class="px-3.5 py-2 text-sm font-medium text-gray-400 bg-gray-50 border border-gray-200 rounded-lg cursor-not-allowed"
+                        />
+                    </template>
                 </div>
             </section>
         </main>

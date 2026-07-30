@@ -17,25 +17,15 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    category: {
-        type: Object,
-        required: true,
-    },
-    author: {
-        type: Object,
-        required: true,
-    },
 });
 
 const formatDate = (dateValue) => {
     if (!dateValue) return "";
     const d = new Date(dateValue);
 
-    // Extract and pad day and month
     const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+    const month = String(d.getMonth() + 1).padStart(2, "0");
 
-    // Get last two digits of the year
     const year = String(d.getFullYear()).slice();
 
     return `${day}-${month}-${year}`;
@@ -70,7 +60,7 @@ const date = formatDate(props.post.created_at);
                         class="inline-block text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full mb-3"
                     >
                         <i class="fa-solid fa-code mr-1"></i>
-                        {{ category.name }}
+                        {{ post.category?.name }}
                     </span>
                     <h1
                         class="text-2xl md:text-4xl font-bold text-gray-900 leading-snug mb-4"
@@ -90,7 +80,7 @@ const date = formatDate(props.post.created_at);
                             ><i
                                 class="fa-regular fa-user text-blue-600 mr-1.5"
                             ></i>
-                            {{ author.username }}</span
+                            {{ post.user?.username }}</span
                         >
                     </div>
                 </header>

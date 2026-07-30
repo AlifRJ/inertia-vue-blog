@@ -20,7 +20,7 @@ class HomeController extends Controller
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
-        'posts' => Post::with(['user', 'category'])->get(),
+        'posts' => Post::latest()->with(['user', 'category'])->limit(9)->get(),
         'postCategories' => PostCategory::latest()->get()
         ]);
     }
@@ -38,19 +38,20 @@ class HomeController extends Controller
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
-        'posts' => Post::with(['user', 'category'])->get()
+        'posts' => Post::with(['user', 'category'])->latest()->paginate(12)
         ]);
     }
     public function blogDetail(Post $post)
     {
-        // dd($post);
+        $data = $post->load([
+            'user',
+            'category'
+        ]);
         return Inertia::render('BlogDetail', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
-        'post' => $post,
-        'category' => $post->category(),
-        'author' => $post->user(),
+        'post' => $data,
         ]);
     }
 }

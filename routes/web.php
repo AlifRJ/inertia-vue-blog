@@ -20,7 +20,7 @@ Route::get('/dashboard', function () {
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('dashboard/post', [PostController::class, 'index'])->middleware(['auth', 'verified'])->name("my.post");
-Route::get('dashboard/post{post:slug}', [PostController::class, 'edit'])->middleware(['auth', 'verified'])->name("edit.post");
+Route::get('dashboard/post/{post:slug}', [PostController::class, 'edit'])->middleware(['auth', 'verified'])->name("edit.post");
 
 // Profile
 Route::middleware('auth')->group(function () {
