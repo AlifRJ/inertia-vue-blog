@@ -1,18 +1,8 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
-import HomeLayout from "@/Layouts/HomeLayout.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
 const props = defineProps({
-    canLogin: {
-        type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
     post: {
         type: Object,
         required: true,
@@ -34,11 +24,7 @@ const date = formatDate(props.post.created_at);
 </script>
 <template>
     <Head :title="post.slug" />
-    <HomeLayout
-        :canLogin="canLogin"
-        :canRegister="canRegister"
-        :laravelVersion="laravelVersion"
-    >
+    <AuthenticatedLayout>
         <!-- MAIN CONTAINER -->
         <main class="max-w-4xl mx-auto px-6 py-8 flex-grow w-full">
             <article
@@ -48,7 +34,7 @@ const date = formatDate(props.post.created_at);
                 <div class="mb-6">
                     <Link
                         class="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition"
-                        :href="route('blog')"
+                        :href="route('post.index')"
                         ><i class="fa-solid fa-arrow-left"></i> Kembali ke
                         Daftar Artikel
                     </Link>
@@ -95,32 +81,9 @@ const date = formatDate(props.post.created_at);
                 <!-- Isi Artikel -->
                 <div
                     v-html="post.body"
-                    class="text-gray-700 space-y-6 text-base md:text-lg leading-relaxed"
+                    class="prose max-w-none text-gray-700 space-y-6 text-base md:text-lg leading-relaxed"
                 ></div>
-                <!-- Bagian Bagikan -->
-                <footer
-                    class="mt-12 pt-6 border-t border-gray-100 flex items-center gap-4 text-sm text-gray-600"
-                >
-                    <span class="font-medium">Bagikan artikel ini:</span>
-                    <div class="flex gap-2">
-                        <a
-                            href="#"
-                            class="w-9 h-9 bg-gray-100 hover:bg-blue-600 hover:text-white rounded-full flex items-center justify-center transition"
-                            ><i class="fa-brands fa-facebook-f"></i
-                        ></a>
-                        <a
-                            href="#"
-                            class="w-9 h-9 bg-gray-100 hover:bg-blue-600 hover:text-white rounded-full flex items-center justify-center transition"
-                            ><i class="fa-brands fa-x-twitter"></i
-                        ></a>
-                        <a
-                            href="#"
-                            class="w-9 h-9 bg-gray-100 hover:bg-blue-600 hover:text-white rounded-full flex items-center justify-center transition"
-                            ><i class="fa-brands fa-whatsapp"></i
-                        ></a>
-                    </div>
-                </footer>
             </article>
         </main>
-    </HomeLayout>
+    </AuthenticatedLayout>
 </template>

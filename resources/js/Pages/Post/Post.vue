@@ -1,8 +1,9 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link, router } from "@inertiajs/vue3";
-import { ref, computed } from "vue";
+import { Head, Link, router, usePage } from "@inertiajs/vue3";
+import { ref, computed, watch } from "vue";
 
+// Catch props
 const props = defineProps({
     posts: Object,
 });
@@ -33,31 +34,42 @@ const filteredPosts = computed(() => {
     });
 });
 
-// Delete single post
-// const deletePost = (id) => {
-//     if (confirm("Are you sure you want to delete this post?")) {
-//         router.delete(route("posts.destroy", id), {
-//             preserveScroll: true,
-//         });
-//     }
-// };
+const page = usePage();
+const flashSuccess = computed(() => page.props.flash?.success);
 
-// // Bulk delete action
-// const bulkDelete = () => {
-//     if (confirm(`Delete ${selectedPosts.value.length} selected posts?`)) {
-//         router.post(
-//             route("posts.bulk-destroy"),
-//             { ids: selectedPosts.value },
-//             {
-//                 onSuccess: () => {
-//                     selectedPosts.value = [];
-//                     selectAll.value = false;
-//                 },
-//                 preserveScroll: true,
-//             },
-//         );
-//     }
-// };
+watch(flashSuccess, (newVal) => {
+    if (newVal) {
+        setTimeout(() => {
+            page.props.flash.success = null;
+        }, 4000);
+    }
+});
+
+// Delete single post
+const deletePost = (slug) => {
+    if (confirm("Are you sure you want to delete this post?")) {
+        router.delete(route("post.destroy", slug), {
+            preserveScroll: true,
+        });
+    }
+};
+
+// Bulk delete action
+const bulkDelete = () => {
+    if (confirm(`Delete ${selectedPosts.value.length} selected posts?`)) {
+        router.post(
+            route("post.bulk-destroy"),
+            { ids: selectedPosts.value },
+            {
+                onSuccess: () => {
+                    selectedPosts.value = [];
+                    selectAll.value = false;
+                },
+                preserveScroll: true,
+            },
+        );
+    }
+};
 </script>
 
 <template>
@@ -73,6 +85,12 @@ const filteredPosts = computed(() => {
         <div
             class="bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden"
         >
+            <div
+                v-if="flashSuccess"
+                class="mb-4 p-4 text-sm text-green-700 bg-green-100 rounded-lg border border-green-200"
+            >
+                {{ flashSuccess }}
+            </div>
             <!-- Table Header & Search Bar -->
             <div
                 class="p-5 border-b border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
@@ -105,13 +123,13 @@ const filteredPosts = computed(() => {
                     </button>
 
                     <!-- New Post Link -->
-                    <!-- <Link
-                            :href="route('posts.create')"
-                            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition shadow-xs flex items-center gap-2"
-                        >
-                            <i class="fa-solid fa-plus text-xs"></i>
-                            New Post
-                        </Link> -->
+                    <Link
+                        :href="route('post.create')"
+                        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition shadow-xs flex items-center gap-2"
+                    >
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        New Post
+                    </Link>
                 </div>
             </div>
 
@@ -188,7 +206,7 @@ const filteredPosts = computed(() => {
                                 <span
                                     class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
                                     :class="
-                                        post.is_published
+                                        post.published
                                             ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                                             : 'bg-amber-50 text-amber-700 border border-amber-200'
                                     "
@@ -196,16 +214,12 @@ const filteredPosts = computed(() => {
                                     <span
                                         class="w-1.5 h-1.5 rounded-full"
                                         :class="
-                                            post.is_published
+                                            post.published
                                                 ? 'bg-emerald-500'
                                                 : 'bg-amber-500'
                                         "
                                     ></span>
-                                    {{
-                                        post.is_published
-                                            ? "Published"
-                                            : "Draft"
-                                    }}
+                                    {{ post.published ? "Published" : "Draft" }}
                                 </span>
                             </td>
 
@@ -224,30 +238,30 @@ const filteredPosts = computed(() => {
                             <td class="p-4 text-right whitespace-nowrap">
                                 <div class="inline-flex items-center gap-2">
                                     <Link
-                                        :href="route('blog.details', post.slug)"
+                                        :href="route('post.show', post.slug)"
                                         class="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition"
                                         title="View Post"
                                     >
                                         <i class="fa-solid fa-eye"></i>
                                     </Link>
 
-                                    <!-- <Link
-                                            :href="route('posts.edit', post.id)"
-                                            class="p-1.5 text-blue-600 hover:text-blue-800 rounded-lg hover:bg-blue-50 transition"
-                                            title="Edit Post"
-                                        >
-                                            <i
-                                                class="fa-solid fa-pen-to-square"
-                                            ></i>
-                                        </Link>
+                                    <Link
+                                        :href="route('post.edit', post.slug)"
+                                        class="p-1.5 text-blue-600 hover:text-blue-800 rounded-lg hover:bg-blue-50 transition"
+                                        title="Edit Post"
+                                    >
+                                        <i
+                                            class="fa-solid fa-pen-to-square"
+                                        ></i>
+                                    </Link>
 
-                                        <button
-                                            @click="deletePost(post.id)"
-                                            class="p-1.5 text-red-500 hover:text-red-700 rounded-lg hover:bg-red-50 transition"
-                                            title="Delete Post"
-                                        >
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button> -->
+                                    <button
+                                        @click="deletePost(post.slug)"
+                                        class="p-1.5 text-red-500 hover:text-red-700 rounded-lg hover:bg-red-50 transition"
+                                        title="Delete Post"
+                                    >
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
