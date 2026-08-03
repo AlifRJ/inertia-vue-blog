@@ -1,5 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import Searchbox from "@/Components/Searchbox.vue";
 import { Head, Link, router, usePage } from "@inertiajs/vue3";
 import { ref, computed, watch } from "vue";
 
@@ -102,12 +103,7 @@ const bulkDelete = () => {
                     >
                         <i class="fa-solid fa-magnifying-glass text-xs"></i>
                     </span>
-                    <input
-                        v-model="search"
-                        type="text"
-                        placeholder="Search posts..."
-                        class="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                    />
+                    <Searchbox v-model="search" placeholder="Search post..." />
                 </div>
 
                 <!-- Header Actions -->

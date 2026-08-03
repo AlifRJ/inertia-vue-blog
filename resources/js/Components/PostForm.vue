@@ -3,9 +3,10 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
+import FileInput from "@/Components/FileInput.vue";
 import RichTextarea from "./RichTextarea.vue";
 import { Link, useForm } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 // catch props
 const props = defineProps({
@@ -19,6 +20,48 @@ const props = defineProps({
     },
 });
 
+const fileInputRef = ref(null);
+const imagePreview = ref(null);
+
+const forms = ref({
+    image: null,
+    errors: { image: "" },
+});
+
+const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    forms.value.image = file;
+
+    if (file) {
+        // Hapus URL lama dari memori jika sebelumnya sudah ada pratinjau
+        if (imagePreview.value) {
+            URL.revokeObjectURL(imagePreview.value);
+        }
+        imagePreview.value = URL.createObjectURL(file);
+    } else {
+        clearPreview();
+    }
+};
+
+// Fungsi untuk menghapus pratinjau gambar dan form data
+const clearAll = () => {
+    // 1. Bersihkan memori dari URL pratinjau
+    clearPreview();
+
+    // 2. Kosongkan data form Vue
+    forms.value.image = null;
+
+    // 3. Panggil fungsi clear internal milik FileInput untuk mereset input fisik HTML
+    fileInputRef.value?.clear();
+};
+
+const clearPreview = () => {
+    if (imagePreview.value) {
+        URL.revokeObjectURL(imagePreview.value);
+        imagePreview.value = null;
+    }
+};
+
 // Form Mode
 const isEditMode = computed(() => props.post !== null);
 
@@ -26,6 +69,7 @@ const isEditMode = computed(() => props.post !== null);
 const form = useForm({
     category_id: props.post?.category_id ?? "",
     title: props.post?.title ?? "",
+    image: props.post?.image ?? null,
     body: props.post?.body ?? "",
     published: props.post?.published ? true : false, // Memastikan bertipe boolean
 });
@@ -49,6 +93,7 @@ const submit = () => {
         @submit.prevent="submit"
         class="space-y-6 max-w-2xl mx-auto p-6 bg-white rounded-lg shadow"
         id="PostForm"
+        enctype="multipart/form-data"
     >
         <!-- Input Category -->
         <div>
@@ -82,6 +127,53 @@ const submit = () => {
                 required
             />
             <InputError class="mt-2" :message="form.errors.title" />
+        </div>
+
+        <div>
+            <!-- Show existing image if form.image is a string (path) -->
+            <div v-if="typeof form.image === 'string' && form.image">
+                <img
+                    :src="`/storage/${form.image}`"
+                    class="w-128 h-64 object-cover rounded-md"
+                />
+                <span class="text-xs text-gray-500">Current image</span>
+            </div>
+            <!-- Preview container (visible only when an image is selected) -->
+            <div
+                v-if="imagePreview"
+                class="mt-2 mb-3 relative w-128 h-64 object-cover rounded-md border bg-gray-100"
+            >
+                <img
+                    :src="imagePreview"
+                    alt="Preview"
+                    class="w-full h-full object-cover"
+                />
+            </div>
+            <!-- Image Input -->
+            <div>
+                <InputLabel for="image" value="Image" />
+                <div class="flex items-center gap-2 mt-1">
+                    <FileInput
+                        ref="fileInputRef"
+                        @change="handleFileChange"
+                        accept="image/*"
+                        id="image"
+                        type="file"
+                        class="mt-1 block w-full"
+                        v-model="form.image"
+                    />
+                    <InputError class="mt-2" :message="form.errors.image" />
+                    <!-- Tombol Clear hanya muncul jika file sudah dipilih -->
+                    <button
+                        v-if="form.image"
+                        type="button"
+                        @click="clearAll"
+                        class="px-3 py-2 text-sm font-medium text-red-600 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors"
+                    >
+                        Hapus
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- Body Textarea -->

@@ -44,6 +44,7 @@ class PostController extends Controller
         $request->validate([
             'category_id' => 'required|integer',
             'title' => 'required|string|max:255',
+            'image' => 'nullable|image|file|max:2048',
             'body' => 'required|string',
             "published" => 'boolean',
             "published_at" => 'nullable|date'
@@ -55,13 +56,16 @@ class PostController extends Controller
 
         // Define input
         $data = [
-                'category_id' => $request->category_id,
-                'user_id' => Auth::id(),
-                'title' => $request->title,
-                'excerpt' => $excerpt,
-                'body' => $request->body,
-                'published' => $request->boolean('published'),
-            ];
+            'category_id' => $request->category_id,
+            'user_id' => Auth::id(),
+            'title' => $request->title,
+            'excerpt' => $excerpt,
+            'body' => $request->body,
+            'published' => $request->boolean('published'),
+        ];
+        if($request->file('image')){
+            $data['image'] = $request->file('image')->store('post_images', 'public');
+        }
         if ($request->published) {
             $data['published_at'] = Carbon::now();
         }
@@ -77,6 +81,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        $post->image = $post->image ? asset('storage/' . $post->image) : null;
         // Show specified user post
         $post->load('user', "category");
         return Inertia::render('Post/PostDetail',['post' => $post]);

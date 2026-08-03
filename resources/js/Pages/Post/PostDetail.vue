@@ -72,7 +72,19 @@ const date = formatDate(props.post.created_at);
                 </header>
 
                 <!-- Thumbnail -->
+                <!-- Thumbnail -->
                 <div
+                    v-if="post.image"
+                    class="h-64 md:h-96 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 text-5xl mb-10"
+                >
+                    <img
+                        :src="post.image"
+                        alt="Post Image"
+                        class="w-full h-full"
+                    />
+                </div>
+                <div
+                    v-else
                     class="h-64 md:h-96 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 text-5xl mb-10"
                 >
                     <i class="fa-regular fa-image"></i>

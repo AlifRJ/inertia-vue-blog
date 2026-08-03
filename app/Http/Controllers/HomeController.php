@@ -15,13 +15,19 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $posts = Post::latest()->with(['user', 'category'])->limit(9)->get();
+        $posts->transform(function ($post) {
+            $post->image = $post->image ? asset('storage/' . $post->image) : null;
+            return $post;
+        });
+        $postCategories = PostCategory::latest()->get();
 
         return Inertia::render('Home', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
-        'posts' => Post::latest()->with(['user', 'category'])->limit(9)->get(),
-        'postCategories' => PostCategory::latest()->get()
+        'posts' => $posts,
+        'postCategories' => $postCategories
         ]);
     }
     public function about()
@@ -34,15 +40,21 @@ class HomeController extends Controller
     }
     public function blog()
     {
+        $posts =  Post::with(['user', 'category'])->latest()->paginate(12);
+        $posts->transform(function ($post) {
+            $post->image = $post->image ? asset('storage/' . $post->image) : null;
+            return $post;
+        });
         return Inertia::render('Blog', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
-        'posts' => Post::with(['user', 'category'])->latest()->paginate(12)
+        'posts' => $posts
         ]);
     }
     public function blogDetail(Post $post)
     {
+        $post->image = $post->image ? asset('storage/' . $post->image) : null;
         $data = $post->load([
             'user',
             'category'

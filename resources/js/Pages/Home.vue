@@ -66,6 +66,17 @@ defineProps({
                         class="bg-white rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-300 border border-gray-100 flex flex-col"
                     >
                         <div
+                            v-if="post.image"
+                            class="h-48 bg-gray-100 flex items-center justify-center text-gray-400 text-4xl"
+                        >
+                            <img
+                                :src="post.image"
+                                alt="Post Image"
+                                class="w-full h-full object-cover"
+                            />
+                        </div>
+                        <div
+                            v-else
                             class="h-48 bg-gray-100 flex items-center justify-center text-gray-400 text-4xl"
                         >
                             <i class="fa-regular fa-image"></i>
