@@ -12,8 +12,6 @@ onMounted(() => {
         input.value.focus();
     }
 });
-
-// Fungsi pembantu jika user memilih file baru
 const handleFileChange = (event) => {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -23,17 +21,16 @@ const handleFileChange = (event) => {
     }
 };
 
-// Fungsi baru untuk menghapus/reset input file
 const clearFile = () => {
     model.value = null;
     if (input.value) {
-        input.value.value = ""; // Wajib: Reset nilai fisik DOM input file
+        input.value.value = "";
     }
 };
 
 defineExpose({
     focus: () => input.value?.focus(),
-    clear: clearFile, // Mengekspos fungsi clear agar bisa dipanggil dari parent component
+    clear: clearFile,
 });
 </script>
 <script>

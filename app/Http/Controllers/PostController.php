@@ -7,6 +7,7 @@ use App\Models\PostCategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class PostController extends Controller
@@ -41,37 +42,37 @@ class PostController extends Controller
     public function store(Request $request)
     {
         // Request validation
-        $request->validate([
-            'category_id' => 'required|integer',
-            'title' => 'required|string|max:255',
-            'image' => 'nullable|image|file|max:2048',
-            'body' => 'required|string',
-            "published" => 'boolean',
-            "published_at" => 'nullable|date'
+        $validated = $request->validate([
+            'category_id'  => 'required|integer',
+            'title'        => 'required|string|max:255',
+            'image'        => 'nullable|image|max:2048',
+            'body'         => 'required|string',
+            'published'    => 'boolean',
+            'published_at' => 'nullable|date',
         ]);
 
-        // Create excerpt
+        // Add auto-generated or authenticated fields
+        $validated['user_id'] = Auth::id();
+
+        // Create excerpt from body
         $plainText = strip_tags($request->body);
-        $excerpt = str($plainText)->words(10, '...');
+        $validated['excerpt'] = str($plainText)->words(10, '...');
 
-        // Define input
-        $data = [
-            'category_id' => $request->category_id,
-            'user_id' => Auth::id(),
-            'title' => $request->title,
-            'excerpt' => $excerpt,
-            'body' => $request->body,
-            'published' => $request->boolean('published'),
-        ];
-        if($request->file('image')){
-            $data['image'] = $request->file('image')->store('post_images', 'public');
-        }
-        if ($request->published) {
-            $data['published_at'] = Carbon::now();
+        // Handle Boolean field safely
+        $validated['published'] = $request->boolean('published');
+
+        // Handle Image Upload
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->storePublicly('post_images', 'public');
         }
 
-        // Create post
-        Post::create($data);
+        // Handle published_at timestamp
+        if ($validated['published'] && empty($validated['published_at'])) {
+            $validated['published_at'] = Carbon::now();
+        }
+
+        // Create post using validated and processed data
+        Post::create($validated);
 
         return redirect()->route('post.index')->with('success', 'Post Created Successfuly!');
     }
@@ -102,32 +103,41 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        // Request Validation
-        $request->validate([
-            'category_id' => 'required|integer',
-            'title' => 'required|string|max:255',
-            'body' => 'required|string',
-            "published" => 'boolean',
-            "published_at" => 'nullable|date'
+        $validated = $request->validate([
+            'category_id'  => 'required|integer',
+            'title'        => 'required|string|max:255',
+            'image'        => 'nullable',
+            'image.*'        => 'sometimes|image|max:2048',
+            'body'         => 'required|string',
+            'published'    => 'boolean',
+            'published_at' => 'nullable|date',
         ]);
 
+        // Handle excerpt & booleans
         $plainText = strip_tags($request->body);
+        $validated['excerpt'] = str($plainText)->words(10, '...');
+        $validated['published'] = $request->boolean('published');
 
-        // Update post with request
-        $post->category_id = $request->category_id;
-        $post->title = $request->title;
-        $post->body = $request->body;
-        $post->excerpt = str($plainText)->words(10, '...');
-        $post->published = $request->boolean('published');
-        if ($request->published && !$post->published_at) {
-            $post->published_at = Carbon::now();
+        // Handle published_at logic
+        if ($validated['published'] && empty($post->published_at)) {
+            $validated['published_at'] = Carbon::now();
         }
 
-        // reset slug: enabling sluggable
-        $post->slug = null; 
+        // Handle image upload & old file cleanup
+        if ($request->hasFile('image')) {
+            if ($post->image && Storage::disk('public')->exists($post->image)) {
+                Storage::disk('public')->delete($post->image);
+            }
 
-        // save post
-        $post->save();
+            $validated['image'] = $request->file('image')->storePublicly('post_images', 'public');
+        }
+
+        // Reset slug if title changed
+        if ($post->title !== $validated['title']) {
+            $validated['slug'] = null; 
+        }
+
+        $post->update($validated);
 
         return redirect()->route('post.index')->with('success', 'Post Updated Successfuly!');
     }
