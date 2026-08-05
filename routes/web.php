@@ -13,6 +13,8 @@ Route::get('/', [HomeController::class, "index"])->name("home");
 Route::get('/about', [HomeController::class, "about"])->name("about");
 Route::get('/blog', [HomeController::class, "blog"])->name("blog");
 Route::get('/blog/{post:slug}', [HomeController::class, "blogDetail"])->name("blog.details");
+Route::get('/category', [HomeController::class, "category"])->name("category");
+Route::get('/category/{category:slug}', [HomeController::class, "categoryDetail"])->name("category.details");
 
 // Dashboard
 Route::middleware(['auth','verified'])->group(function(){

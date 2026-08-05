@@ -19,6 +19,7 @@ class PostCategoryFactory extends Factory
     {
         return [
             'name' => fake()->sentence(mt_rand(1,3)),
+            'detail' => fake()->paragraph(),
             'slug' => fake()->unique()->slug(),
         ];
     }

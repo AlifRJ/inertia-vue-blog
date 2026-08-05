@@ -1,5 +1,5 @@
 <script setup>
-import { Link, Head } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import HomeLayout from "@/Layouts/HomeLayout.vue";
 const props = defineProps({
     canLogin: {
@@ -8,17 +8,22 @@ const props = defineProps({
     canRegister: {
         type: Boolean,
     },
-    categories: {
+    posts: {
+        type: Object,
+        required: true,
+    },
+    category: {
         type: Object,
         required: true,
     },
 });
 </script>
 <template>
-    <Head title="Blog Category" />
+    <Head :title="category.name" />
+    <!-- MAIN CONTAINER -->
     <HomeLayout :canLogin="canLogin" :canRegister="canRegister">
         <main class="max-w-7xl mx-auto px-6 py-8 flex-grow w-full">
-            <!-- Search Bar -->
+            <!-- SEARCH BAR -->
             <section class="mb-10">
                 <form
                     class="flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto"
@@ -46,36 +51,60 @@ const props = defineProps({
                 </form>
             </section>
 
-            <!-- Category Card -->
+            <!-- CATEGORY HEADER & ARTICLES SECTION -->
             <section class="mb-16">
                 <div
-                    v-for="category in categories.data"
-                    class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-4 hover:cursor-pointer"
+                    class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8"
                 >
-                    <Link :href="route('category.details', category.slug)">
-                        <h2
-                            class="text-2xl font-bold text-gray-900 flex items-center gap-2 mb-2"
-                        >
-                            <i
-                                class="fa-solid fa-laptop-code text-blue-600"
-                            ></i>
-                            Kategori: {{ category.name }}
-                        </h2>
-                        <p class="text-sm text-gray-500">
-                            {{ category.detail }}
-                        </p>
-                    </Link>
+                    <h2
+                        class="text-2xl font-bold text-gray-900 flex items-center gap-2 mb-2"
+                    >
+                        <i class="fa-solid fa-laptop-code text-blue-600"></i>
+                        Kategori: {{ category.name }}
+                    </h2>
+                    <p class="text-sm text-gray-500">
+                        {{ category.detail }}
+                    </p>
                 </div>
 
-                <!-- Pagination -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Item 1 -->
+                    <div
+                        v-for="post in posts.data"
+                        class="bg-white rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-300 border border-gray-100 flex flex-col"
+                    >
+                        <div
+                            class="h-48 bg-gray-100 flex items-center justify-center text-gray-400 text-4xl"
+                        >
+                            <i class="fa-regular fa-image"></i>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <span
+                                class="inline-block text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full mb-3 w-max"
+                                ><i class="fa-solid fa-code mr-1"></i>
+                                {{ post.category?.name }}</span
+                            >
+                            <h4
+                                class="text-lg font-semibold text-gray-900 mb-2"
+                            >
+                                <Link
+                                    class="hover:text-blue-600 transition"
+                                    :href="route('blog.details', post.slug)"
+                                    >{{ post.title }}
+                                </Link>
+                            </h4>
+                            <p class="text-sm text-gray-600 mb-4 flex-grow">
+                                {{ post.excerpt }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 <div
-                    v-if="categories.links && categories.links.length > 3"
+                    v-if="posts.links && posts.links.length > 3"
                     class="mt-10 flex items-center justify-center space-x-1"
                 >
-                    <template
-                        v-for="(link, index) in categories.links"
-                        :key="index"
-                    >
+                    <template v-for="(link, index) in posts.links" :key="index">
                         <!-- Active / Clickable Link -->
                         <Link
                             v-if="link.url"
