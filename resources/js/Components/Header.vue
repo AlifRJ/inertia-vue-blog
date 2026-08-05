@@ -50,6 +50,12 @@ const isMobileMenuOpen = ref(false);
                     >
                         Blog
                     </NavLink>
+                    <NavLink
+                        :href="route('category')"
+                        :active="route().current('category')"
+                    >
+                        Category
+                    </NavLink>
                 </div>
 
                 <!-- Login/Register -->
@@ -124,6 +130,9 @@ const isMobileMenuOpen = ref(false);
                 </ResponsiveNavLink>
                 <ResponsiveNavLink :href="route('blog')">
                     Blog
+                </ResponsiveNavLink>
+                <ResponsiveNavLink :href="route('category')">
+                    Category
                 </ResponsiveNavLink>
 
                 <div class="pt-4 border-t border-gray-200 space-y-2">

@@ -9,10 +9,6 @@ const props = defineProps({
     canRegister: {
         type: Boolean,
     },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
     post: {
         type: Object,
         required: true,
@@ -34,11 +30,7 @@ const date = formatDate(props.post.created_at);
 </script>
 <template>
     <Head :title="post.slug" />
-    <HomeLayout
-        :canLogin="canLogin"
-        :canRegister="canRegister"
-        :laravelVersion="laravelVersion"
-    >
+    <HomeLayout :canLogin="canLogin" :canRegister="canRegister">
         <!-- MAIN CONTAINER -->
         <main class="max-w-4xl mx-auto px-6 py-8 flex-grow w-full">
             <article

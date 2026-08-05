@@ -9,20 +9,12 @@ defineProps({
     canRegister: {
         type: Boolean,
     },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
 });
 </script>
 
 <template>
     <Head title="About" />
-    <HomeLayout
-        :canLogin="canLogin"
-        :canRegister="canRegister"
-        :laravelVersion="laravelVersion"
-    >
+    <HomeLayout :canLogin="canLogin" :canRegister="canRegister">
         <main class="max-w-7xl mx-auto px-6 py-8 flex-grow w-full">
             <section class="mb-16">
                 <h2

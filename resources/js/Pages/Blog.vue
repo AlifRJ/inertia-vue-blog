@@ -9,10 +9,6 @@ defineProps({
     canRegister: {
         type: Boolean,
     },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
     posts: {
         type: Object,
         required: true,
@@ -22,11 +18,7 @@ defineProps({
 
 <template>
     <Head title="Blogs" />
-    <HomeLayout
-        :canLogin="canLogin"
-        :canRegister="canRegister"
-        :laravelVersion="laravelVersion"
-    >
+    <HomeLayout :canLogin="canLogin" :canRegister="canRegister">
         <!-- MAIN CONTAINER -->
         <main class="max-w-7xl mx-auto px-6 py-8 flex-grow w-full">
             <!-- SEARCH BAR -->
@@ -100,6 +92,7 @@ defineProps({
                     </div>
                 </div>
 
+                <!-- Pagination Links -->
                 <div
                     v-if="posts.links && posts.links.length > 3"
                     class="mt-10 flex items-center justify-center space-x-1"

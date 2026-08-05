@@ -9,10 +9,6 @@ defineProps({
     canRegister: {
         type: Boolean,
     },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
     posts: {
         type: Object,
         required: true,
@@ -26,27 +22,25 @@ defineProps({
 
 <template>
     <Head title="Home" />
-    <HomeLayout
-        :canLogin="canLogin"
-        :canRegister="canRegister"
-        :laravelVersion="laravelVersion"
-    >
+    <HomeLayout :canLogin="canLogin" :canRegister="canRegister">
         <main class="max-w-7xl mx-auto px-6 py-8 flex-grow w-full">
             <!-- CATEGORIES SECTION -->
             <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 <div v-for="category in postCategories">
-                    <div
-                        class="bg-white p-8 rounded-xl text-center border border-gray-100 shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center justify-center gap-3 h-40 group"
-                    >
+                    <Link :href="route('category.details', category.slug)">
                         <div
-                            class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-xl group-hover:bg-blue-600 group-hover:text-white transition duration-300"
+                            class="bg-white p-8 rounded-xl text-center border border-gray-100 shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-300 cursor-pointer flex flex-col items-center justify-center gap-3 h-40 group"
                         >
-                            <i class="fa-solid fa-laptop-code"></i>
+                            <div
+                                class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-xl group-hover:bg-blue-600 group-hover:text-white transition duration-300"
+                            >
+                                <i class="fa-solid fa-laptop-code"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800">
+                                {{ category.name }}
+                            </h3>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-800">
-                            {{ category.name }}
-                        </h3>
-                    </div>
+                    </Link>
                 </div>
             </section>
 

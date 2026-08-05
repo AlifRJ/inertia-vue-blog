@@ -9,10 +9,6 @@ defineProps({
     canRegister: {
         type: Boolean,
     },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
 });
 </script>
 
@@ -24,6 +20,6 @@ defineProps({
                 <slot />
             </main>
         </div>
-        <Footer :laravelVersion="laravelVersion" />
+        <Footer />
     </div>
 </template>
