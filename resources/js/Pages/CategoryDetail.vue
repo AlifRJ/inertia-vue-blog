@@ -20,10 +20,9 @@ const props = defineProps({
 </script>
 <template>
     <Head :title="category.name" />
-    <!-- MAIN CONTAINER -->
     <HomeLayout :canLogin="canLogin" :canRegister="canRegister">
         <main class="max-w-7xl mx-auto px-6 py-8 flex-grow w-full">
-            <!-- SEARCH BAR -->
+            <!-- Search Bar -->
             <section class="mb-10">
                 <form
                     class="flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto"
@@ -51,7 +50,7 @@ const props = defineProps({
                 </form>
             </section>
 
-            <!-- CATEGORY HEADER & ARTICLES SECTION -->
+            <!-- Header-->
             <section class="mb-16">
                 <div
                     class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8"
@@ -62,18 +61,30 @@ const props = defineProps({
                         <i class="fa-solid fa-laptop-code text-blue-600"></i>
                         Kategori: {{ category.name }}
                     </h2>
-                    <p class="text-sm text-gray-500">
-                        {{ category.detail }}
-                    </p>
+                    <p
+                        v-html="category.detail"
+                        class="text-sm text-gray-500"
+                    ></p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Item 1 -->
+                    <!-- Posts -->
                     <div
                         v-for="post in posts.data"
                         class="bg-white rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition duration-300 border border-gray-100 flex flex-col"
                     >
                         <div
+                            v-if="post.image"
+                            class="h-48 bg-gray-100 flex items-center justify-center text-gray-400 text-4xl"
+                        >
+                            <img
+                                :src="post.image"
+                                alt="Post Image"
+                                class="w-full h-full object-cover"
+                            />
+                        </div>
+                        <div
+                            v-else
                             class="h-48 bg-gray-100 flex items-center justify-center text-gray-400 text-4xl"
                         >
                             <i class="fa-regular fa-image"></i>
@@ -105,7 +116,6 @@ const props = defineProps({
                     class="mt-10 flex items-center justify-center space-x-1"
                 >
                     <template v-for="(link, index) in posts.links" :key="index">
-                        <!-- Active / Clickable Link -->
                         <Link
                             v-if="link.url"
                             :href="link.url"
@@ -119,7 +129,6 @@ const props = defineProps({
                             preserve-scroll
                         />
 
-                        <!-- Disabled State (First/Last page controls when inactive or '...') -->
                         <span
                             v-else
                             v-html="link.label"

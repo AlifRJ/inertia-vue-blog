@@ -78,7 +78,7 @@ defineProps({
                 </div>
             </section>
 
-            <!-- BAGIAN KONTAK / HUBUNGI KAMI -->
+            <!-- Contact -->
             <section class="mt-12 pt-12 border-t border-gray-100">
                 <h3
                     class="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2"

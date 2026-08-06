@@ -22,8 +22,9 @@ class PostFactory extends Factory
             'slug' => fake()->unique()->slug(),
             'excerpt' => fake()->paragraph(),
             'body' => fake()->paragraph(mt_rand(5,10)),
+            'published' => fake()->boolean(),
             'user_id' => mt_rand(1,5),
-            'category_id' => mt_rand(1,3)
+            'category_id' => mt_rand(1,6)
         ];
     }
 }

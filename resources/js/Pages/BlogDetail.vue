@@ -26,7 +26,7 @@ const formatDate = (dateValue) => {
 
     return `${day}-${month}-${year}`;
 };
-const date = formatDate(props.post.created_at);
+const date = formatDate(props.post.published_at);
 </script>
 <template>
     <Head :title="post.slug" />
@@ -36,17 +36,15 @@ const date = formatDate(props.post.created_at);
             <article
                 class="bg-white p-8 md:p-12 rounded-xl shadow-sm border border-gray-100 mb-16"
             >
-                <!-- Tombol Kembali -->
                 <div class="mb-6">
                     <Link
                         class="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition"
                         :href="route('blog')"
-                        ><i class="fa-solid fa-arrow-left"></i> Kembali ke
-                        Daftar Artikel
+                        ><i class="fa-solid fa-arrow-left"></i> Back To Articles
                     </Link>
                 </div>
 
-                <!-- Header Artikel -->
+                <!-- Header -->
                 <header class="mb-8">
                     <span
                         class="inline-block text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full mb-3"
@@ -95,16 +93,16 @@ const date = formatDate(props.post.created_at);
                     <i class="fa-regular fa-image"></i>
                 </div>
 
-                <!-- Isi Artikel -->
+                <!-- Body -->
                 <div
                     v-html="post.body"
                     class="text-gray-700 space-y-6 text-base md:text-lg leading-relaxed"
                 ></div>
-                <!-- Bagian Bagikan -->
+                <!-- Share -->
                 <footer
                     class="mt-12 pt-6 border-t border-gray-100 flex items-center gap-4 text-sm text-gray-600"
                 >
-                    <span class="font-medium">Bagikan artikel ini:</span>
+                    <span class="font-medium">Share This Article:</span>
                     <div class="flex gap-2">
                         <a
                             href="#"

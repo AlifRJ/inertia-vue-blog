@@ -160,7 +160,7 @@ class PostController extends Controller
         // List validation
         $request->validate([
             'ids' => 'required|array',
-            'ids.*' => 'integer|exists:posts,id', // Memastikan setiap ID valid dan ada di database
+            'ids.*' => 'integer|exists:posts,id',
         ]);
 
         // Delete Post by id from list

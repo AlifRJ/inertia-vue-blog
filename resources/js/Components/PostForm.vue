@@ -29,7 +29,7 @@ const form = useForm({
     title: props.post?.title ?? "",
     image: props.post?.image ?? null,
     body: props.post?.body ?? "",
-    published: props.post?.published ? true : false, // Memastikan bertipe boolean
+    published: props.post?.published ? true : false,
 });
 
 // Watch `form.image` to automatically create/revoke object previews when a new file is chosen via v-model
@@ -152,7 +152,6 @@ const submit = () => {
                 <div class="flex items-center gap-2 mt-1">
                     <FileInput
                         ref="fileInputRef"
-                        @change="handleFileChange"
                         accept="image/*"
                         id="image"
                         type="file"

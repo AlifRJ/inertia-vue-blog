@@ -133,7 +133,18 @@ const showingNavigationDropdown = ref(false);
                     :href="route('post.index')"
                     :active="route().current('post.index')"
                 >
-                    My Post
+                    Post
+                </ResponsiveNavLink>
+            </div>
+            <div
+                v-if="$page.props.auth.user.is_admin"
+                class="space-y-1 pb-3 pt-2"
+            >
+                <ResponsiveNavLink
+                    :href="route('category.index')"
+                    :active="route().current('category.index')"
+                >
+                    Post Category
                 </ResponsiveNavLink>
             </div>
 
@@ -268,7 +279,7 @@ const showingNavigationDropdown = ref(false);
                             </a>
                         </NavLink>
                     </div>
-                    <div>
+                    <div v-if="$page.props.auth.user.is_admin">
                         <NavLink
                             v-if="$slots.header"
                             :href="route('category.index')"
@@ -333,8 +344,38 @@ const showingNavigationDropdown = ref(false);
                 <div class="border-t border-gray-200 pt-4">
                     <NavLink
                         v-if="$slots.header"
-                        :href="route('dashboard')"
-                        :active="route().current('dashboard')"
+                        :href="route('profile.edit')"
+                        :active="route('profile.edit')"
+                    >
+                        <a
+                            href="#"
+                            class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                        >
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.43l-1.003.767c-.307.235-.478.613-.478.997A8.584 8.584 0 0 1 17 12c0 .182-.006.364-.017.544 0 .384.17.762.478.997l1.003.767a1.125 1.125 0 0 1 .26 1.43l-1.296 2.247a1.125 1.125 0 0 1-1.37.49l-1.216-.456a1.125 1.125 0 0 0-1.076.124a6.57 6.57 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281a1.125 1.125 0 0 0-.646-.87a6.512 6.512 0 0 1-.22-.127a1.125 1.125 0 0 0-1.074-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.43l1.004-.767c.308-.235.478-.613.478-.997A8.584 8.584 0 0 1 7 12c0-.182.006-.364.017-.544 0-.384-.17-.762-.478-.997L5.536 9.69a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.49l1.216.456c.356.133.751.072 1.076-.124c.072-.044.146-.087.22-.128c.332-.183.582-.495.645-.869l.214-1.28Z"
+                                />
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                                />
+                            </svg>
+                            Settings
+                        </a>
+                    </NavLink>
+                    <NavLink
+                        v-else
+                        :href="route('profile.edit')"
+                        :active="route('profile.edit')"
                     >
                         <a
                             href="#"

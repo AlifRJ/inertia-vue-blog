@@ -6,7 +6,6 @@ use App\Http\Controllers\PostCategoryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 // Home
 Route::get('/', [HomeController::class, "index"])->name("home");
@@ -23,7 +22,8 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::resource('dashboard/post', PostController::class)->parameters(['post' => 'post:slug']);
     Route::post('dashboard/post/bulk-destroy', [PostController::class, 'bulkDestroy'])->name('post.bulk-destroy');
     // Post Category
-    Route::resource('dashboard/category', PostCategoryController::class)->parameters(['category' => 'category:slug']);
+    Route::resource('dashboard/category', PostCategoryController::class)->parameters(['category' => 'postCategory:slug']);
+    Route::post('dashboard/category/bulk-destroy', [PostCategoryController::class, 'bulkDestroy'])->name('category.bulk-destroy');
 });
 
 // Profile

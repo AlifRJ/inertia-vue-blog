@@ -1,7 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { ref } from "vue";
 defineProps({
     user: Object,
 });
@@ -21,7 +20,7 @@ defineProps({
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 justify-center align-middle">
-                        <p>Hello {{ user[0].name }}!</p>
+                        <p>Hello {{ user.name }}!</p>
                     </div>
                 </div>
             </div>

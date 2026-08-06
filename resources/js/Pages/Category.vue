@@ -15,7 +15,7 @@ const props = defineProps({
 });
 </script>
 <template>
-    <Head title="Blog Category" />
+    <Head title="Categories" />
     <HomeLayout :canLogin="canLogin" :canRegister="canRegister">
         <main class="max-w-7xl mx-auto px-6 py-8 flex-grow w-full">
             <!-- Search Bar -->
@@ -61,9 +61,10 @@ const props = defineProps({
                             ></i>
                             Kategori: {{ category.name }}
                         </h2>
-                        <p class="text-sm text-gray-500">
-                            {{ category.detail }}
-                        </p>
+                        <p
+                            v-html="category.detail"
+                            class="text-sm text-gray-500"
+                        ></p>
                     </Link>
                 </div>
 
