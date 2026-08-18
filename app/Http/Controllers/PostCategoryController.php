@@ -36,18 +36,9 @@ class PostCategoryController extends Controller
         // Request validation
         $validated = $request->validate([
             'name'        => 'required|string|max:255',
-            // 'image'        => 'nullable|image|max:2048',
             'detail'         => 'required|string',
         ]);   
 
-        // dd($validated);
-
-        // Handle Image Upload
-        // if ($request->hasFile('image')) {
-        //     $validated['image'] = $request->file('image')->storePublicly('post_images', 'public');
-        // }
-
-        // Create post using validated and processed data
         PostCategory::create($validated);
 
         return redirect()->route('category.index')->with('success', 'Category Created Successfuly!');
@@ -78,21 +69,9 @@ class PostCategoryController extends Controller
         // dd($request);
         $validated = $request->validate([
             'name'        => 'required|string|max:255',
-            // 'image'        => 'nullable',
-            // 'image.*'        => 'sometimes|image|max:2048',
             'detail'         => 'required|string',
         ]);
 
-        // Handle image upload & old file cleanup
-        // if ($request->hasFile('image')) {
-        //     if ($post->image && Storage::disk('public')->exists($post->image)) {
-        //         Storage::disk('public')->delete($post->image);
-        //     }
-
-        //     $validated['image'] = $request->file('image')->storePublicly('post_images', 'public');
-        // }
-
-        // Reset slug if title changed
         if ($postCategory->title !== $validated['title']) {
             $validated['slug'] = null; 
         }

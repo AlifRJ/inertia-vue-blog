@@ -7,52 +7,119 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+# About This Project
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+My Blog adalah project full stack menggunakan teknologi Laravel Inertia dengan Vue.js dan Tailwind.css
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Prerequisites
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Before starting, ensure you have the following installed:
 
-## Learning Laravel
+- **PHP** (>= 8.3 recommended)
+- **Composer**
+- **Node.js** (>= 18.x) & **NPM**
+- **MySQL** (or any preferred database engine)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Local Setup Instructions
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Follow these step-by-step instructions to get the application running.
 
-## Agentic Development
+### 1. Clone the Repository
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Clone the project from GitHub and navigate into the project directory:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/AlifRJ/inertia-vue-blog
+cd YOUR_REPO_NAME
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Install PHP Dependencies
 
-## Contributing
+Install the required Laravel packages using Composer:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+```
 
-## Code of Conduct
+### 3. Install Frontend Dependencies
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Install the required Node.js packages for Vue and Inertia:
 
-## Security Vulnerabilities
+```bash
+npm install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 4. Environment Configuration
 
-## License
+Copy the template environment file to create your local configurations:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+cp .env.example .env
+```
+
+Open the newly created `.env` file in your code editor and update your database credentials:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database_name
+DB_USERNAME=your_database_user
+DB_PASSWORD=your_database_password
+```
+
+_(Make sure you create an empty database in your local database manager matching the `DB_DATABASE` name above)._
+
+### 5. Generate Application Key
+
+Generate a secure application key for Laravel:
+
+```bash
+php artisan key:generate
+```
+
+### 6. Run Database Migrations
+
+Run the migrations to create tables. You can optionally add `--seed` if you need dummy seed data:
+
+```bash
+php artisan migrate
+```
+
+### 7. Link Storage (Optional)
+
+Create the storage symlink:
+
+```bash
+php artisan storage:link
+```
+
+---
+
+## Running the Application
+
+You need to run two separate processes simultaneously to develop locally: the backend PHP server and the Vite frontend compiler.
+
+### Step A: Start the Backend Server
+
+In your terminal, run the following command to start Laravel's local development server:
+
+```bash
+php artisan serve
+```
+
+Your backend will now be accessible at `http://127.0.0.1:8000`.
+
+### Step B: Start the Frontend Compilation (Vite)
+
+Open a **new terminal window or tab**, navigate to the project folder, and run:
+
+```bash
+npm run dev
+```
+
+This starts the Vite development server, which enables Hot Module Replacement (HMR) for your Vue components.
+
+Now, open your browser and navigate to **`http://127.0.0.1:8000`** to view the application.
